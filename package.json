@@ -1,0 +1,21 @@
+{
+  "name": "fantasyspot",
+  "version": "1.0.0",
+  "description": "Fantasyspot project repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests implemented yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZinoFlo/Fantasyspot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ZinoFlo/Fantasyspot/issues"
+  },
+  "homepage": "https://github.com/ZinoFlo/Fantasyspot#readme"
+}
