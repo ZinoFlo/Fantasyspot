@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ZinoFlo/master.git"
+    "url": "git+https://github.com/JulienVink/eco-growth-discovery.git"
   },
   "keywords": [],
   "author": "JulienVink",
