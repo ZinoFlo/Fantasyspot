@@ -20,5 +20,27 @@ Office.onReady((info) => {
 
       initialsDisplay.textContent = initials;
     }
+
+    // "Read Active Files" functionality
+    const readFilesBtn = document.getElementById("read-files-btn");
+    const status = document.getElementById("status");
+    if (readFilesBtn) {
+      readFilesBtn.onclick = () => {
+        status.textContent = "Reading presentation...";
+
+        // In PowerPoint, we read the document content.
+        // We use getFileAsync to get the compressed (pptx) content.
+        Office.context.document.getFileAsync(Office.FileType.Compressed, (result) => {
+          if (result.status === Office.AsyncResultStatus.Succeeded) {
+            const file = result.value;
+            status.textContent = `Success! Presentation read. Total size: ${file.size} bytes.`;
+            file.closeAsync();
+          } else {
+            status.textContent = `Error: ${result.error.message}`;
+            console.error(result.error);
+          }
+        });
+      };
+    }
   }
 });
