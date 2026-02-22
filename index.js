@@ -1,6 +1,6 @@
 /**
  * Eco-growth Discovery Project
- * Entry point for the Node.js project.
+ * Client-side script for the Office Add-in.
  */
 
 Office.onReady((info) => {
