@@ -20,5 +20,48 @@ Office.onReady((info) => {
 
       initialsDisplay.textContent = initials;
     }
+
+    // Read Active Files functionality
+    const readFilesBtn = document.getElementById("read-files-btn");
+    const status = document.getElementById("status");
+
+    if (readFilesBtn) {
+      readFilesBtn.onclick = () => {
+        if (status) status.textContent = "Reading file...";
+
+        Office.context.document.getFileAsync(Office.FileType.Compressed, { sliceSize: 65536 }, (result) => {
+          if (result.status === Office.AsyncResultStatus.Succeeded) {
+            const myFile = result.value;
+            const sliceCount = myFile.sliceCount;
+            let slicesRead = 0;
+
+            if (status) status.textContent = `File loaded. Reading ${sliceCount} slices...`;
+
+            const getSlice = (index) => {
+              myFile.getSliceAsync(index, (sliceResult) => {
+                if (sliceResult.status === Office.AsyncResultStatus.Succeeded) {
+                  slicesRead++;
+                  if (status) status.textContent = `Read slice ${slicesRead} of ${sliceCount}...`;
+
+                  if (slicesRead < sliceCount) {
+                    getSlice(slicesRead);
+                  } else {
+                    myFile.closeAsync();
+                    if (status) status.textContent = `Active file read successfully (${sliceCount} slices).`;
+                  }
+                } else {
+                  myFile.closeAsync();
+                  if (status) status.textContent = "Error reading slice: " + sliceResult.error.message;
+                }
+              });
+            };
+
+            getSlice(0);
+          } else {
+            if (status) status.textContent = "Error reading active file: " + result.error.message;
+          }
+        });
+      };
+    }
   }
 });
