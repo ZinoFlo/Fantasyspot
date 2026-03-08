@@ -21,7 +21,6 @@ Office.onReady((info) => {
       initialsDisplay.textContent = initials;
     }
 
-    // Attach event listener to the "Read Active File" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
       readBtn.onclick = readActiveFile;
@@ -84,6 +83,50 @@ async function readActiveFile() {
     return;
   }
 
+  let file;
+  try {
+    file = await new Promise((resolve, reject) => {
+      Office.context.document.getFileAsync(Office.FileType.Compressed, (result) => {
+        if (result.status === Office.AsyncResultStatus.Succeeded) {
+          resolve(result.value);
+        } else {
+          reject(result.error);
+        }
+      });
+    });
+
+    const sliceCount = file.sliceCount;
+    const fileSize = file.size;
+    let fileContent = new Uint8Array(fileSize);
+    let offset = 0;
+
+    for (let i = 0; i < sliceCount; i++) {
+      const slice = await new Promise((resolve, reject) => {
+        file.getSliceAsync(i, (result) => {
+          if (result.status === Office.AsyncResultStatus.Succeeded) {
+            resolve(result.value);
+          } else {
+            reject(result.error);
+          }
+        });
+      });
+      fileContent.set(slice.data, offset);
+      offset += slice.data.length;
+    }
+
+    if (status) status.textContent = `Successfully read ${fileSize} bytes from the active presentation.`;
+    console.log("File content read successfully:", fileContent);
+  } catch (error) {
+    const errorMsg = "Error reading file: " + (error.message || error);
+    console.error(errorMsg);
+    if (status) status.textContent = errorMsg;
+  } finally {
+    if (file) {
+      await new Promise((resolve) => {
+        file.closeAsync(() => {
+          resolve();
+        });
+      });
   let file = null;
   try {
     // 1. Get the file handle
