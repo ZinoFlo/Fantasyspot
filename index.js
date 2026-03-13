@@ -21,10 +21,10 @@ Office.onReady((info) => {
       initialsDisplay.textContent = initials;
     }
 
-    // Attach event listener to the "Read Active File" button
+    // Attach event listener to the "Read Active Files" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
@@ -71,14 +71,14 @@ function closeAsync(file) {
 }
 
 /**
- * Reads the active PowerPoint file as a compressed byte stream.
+ * Reads the active PowerPoint file(s) as a compressed byte stream.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
-    const errorMsg = "Office.js is not loaded or this is not an Office host.";
+    const errorMsg = "Office.js is not loaded or this is not an Office host for active file(s).";
     console.error(errorMsg);
     if (status) status.textContent = errorMsg;
     return;
@@ -109,11 +109,11 @@ async function readActiveFile() {
     }
 
     if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
+      status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
     }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
+    console.log(`Read ${fileSize} bytes from the active presentation(s).`);
   } catch (error) {
-    const errorMsg = `Error reading file: ${error.message || error}`;
+    const errorMsg = `Error reading active file(s): ${error.message || error}`;
     console.error(errorMsg);
     if (status) status.textContent = errorMsg;
   } finally {
