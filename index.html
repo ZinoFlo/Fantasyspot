@@ -30,7 +30,7 @@
         }
         #read-files-btn {
             display: block;
-            margin: 30px auto 0;
+            margin: 0 auto;
             padding: 10px 20px;
             background-color: #217346;
             color: white;
@@ -41,6 +41,9 @@
         }
         #read-files-btn:hover {
             background-color: #1a5a37;
+        }
+        .button-container {
+            margin-top: 30px;
         }
         #status {
             margin-top: 20px;
@@ -65,7 +68,9 @@
     <div class="label">Co Op Initials</div>
     <div id="initials-display">--</div>
 
-    <button id="read-files-btn">Read Active File</button>
+    <div class="button-container">
+        <button id="read-files-btn">Read Active Files</button>
+    </div>
     <div id="status"></div>
 </body>
 </html>
