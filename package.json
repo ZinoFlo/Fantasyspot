@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JulienVink/eco-growth-discovery#readme",
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "http-server": "^14.1.1"
   }
 }
