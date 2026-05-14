@@ -20,4 +20,8 @@ jobs:
     - run: npm install
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
+    - name: Start Server
+      run: npm start > server.log 2>&1 &
+    - name: Wait for Server
+      run: sleep 5
     - run: npm test
