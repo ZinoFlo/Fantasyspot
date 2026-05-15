@@ -18,4 +18,10 @@ jobs:
         node-version: '20'
         cache: 'npm'
     - run: npm install
-    - run: npm test
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
+    - name: Run tests
+      run: |
+        npm start > server.log 2>&1 &
+        sleep 5
+        npm test
