@@ -4,3 +4,9 @@ appengine-generated/
 # Node.js
 node_modules/
 npm-debug.log
+
+# Logs
+server.log
+
+# Test results
+test-results/
