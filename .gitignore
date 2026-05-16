@@ -8,5 +8,6 @@ npm-debug.log
 # Logs
 server.log
 
-# Test results
+# Test results and reports
 test-results/
+playwright-report/
