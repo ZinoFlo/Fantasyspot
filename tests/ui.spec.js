@@ -63,6 +63,9 @@ test.describe('Eco-growth Discovery UI', () => {
     const readBtn = page.locator('#read-files-btn');
     const status = page.locator('#status');
 
+    // Wait for initials to ensure Office environment is initialized
+    await expect(page.locator('#initials-display')).toHaveText('JV');
+
     await readBtn.click();
     await expect(status).toHaveText(/Successfully read active file\(s\): 100 bytes/);
   });
