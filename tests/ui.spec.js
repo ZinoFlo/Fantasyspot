@@ -53,6 +53,9 @@ test.describe('Eco-growth Discovery UI Tests', () => {
     });
 
     await page.goto('/index.html');
+
+    // Wait for the application to be fully initialized (initials display updated from '--' to 'JV')
+    await expect(page.locator('#initials-display')).toHaveText('JV', { timeout: 10000 });
   });
 
   test('should display correct title and initials', async ({ page }) => {
@@ -94,9 +97,6 @@ test.describe('Eco-growth Discovery UI Tests', () => {
   test('should show success status message when reading files', async ({ page }) => {
     const button = page.locator('#read-files-btn');
     const status = page.locator('#status');
-
-    // Add a simple log to see if the button is clicked and if Office is initialized
-    await page.evaluate(() => console.log("Button visible:", !!document.getElementById('read-files-btn')));
 
     await button.click();
 
