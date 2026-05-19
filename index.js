@@ -3,7 +3,7 @@
  * Entry point for the Node.js project.
  */
 
-Office.onReady((info) => {
+function initializeAddIn(info) {
   // Initialize for PowerPoint or when testing in a browser
   if (info.host === Office.HostType.PowerPoint || !info.host) {
     console.log("Eco-growth Discovery initialized.");
@@ -26,6 +26,14 @@ Office.onReady((info) => {
     if (readBtn) {
       readBtn.onclick = readActiveFiles;
     }
+  }
+}
+
+Office.onReady((info) => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => initializeAddIn(info));
+  } else {
+    initializeAddIn(info);
   }
 });
 

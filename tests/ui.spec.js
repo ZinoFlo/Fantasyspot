@@ -2,6 +2,9 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Eco-growth Discovery UI Tests', () => {
   test.beforeEach(async ({ page }) => {
+    // Capture console logs from the browser
+    page.on('console', msg => console.log(`BROWSER [${msg.type()}]: ${msg.text()}`));
+
     // Mock Office.js to prevent external network requests and provide a controlled environment
     await page.route('https://appsforoffice.microsoft.com/lib/1/hosted/office.js', route => {
       route.fulfill({ body: '// Mock Office.js' });
