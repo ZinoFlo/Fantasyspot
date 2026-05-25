@@ -31,7 +31,7 @@ test.describe('Eco-growth Discovery UI', () => {
                           status: 'succeeded',
                           value: { data: new Uint8Array(500) }
                         });
-                      }, 50);
+                      }, 200);
                     },
                     closeAsync: (closeCallback) => {
                       setTimeout(() => {
