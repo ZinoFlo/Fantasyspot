@@ -63,6 +63,9 @@ test.describe('Eco-growth Discovery UI', () => {
   });
 
   test('should update status message when reading files', async ({ page }) => {
+    // Wait for app to initialize
+    await expect(page.locator('#initials-display')).toHaveText('JV');
+
     const button = page.locator('#read-files-btn');
     const status = page.locator('#status');
 
