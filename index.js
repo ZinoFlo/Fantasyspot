@@ -21,10 +21,10 @@ Office.onReady((info) => {
       initialsDisplay.textContent = initials;
     }
 
-    // Attach event listener to the "Read Active File" button
+    // Attach event listener to the "Read Active Files" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
@@ -71,11 +71,13 @@ function closeAsync(file) {
 }
 
 /**
- * Reads the active PowerPoint file as a compressed byte stream.
+ * Reads the active PowerPoint file(s) as a compressed byte stream.
+ * Note: While the UI and function names use plural terminology for design consistency,
+ * Office.context.document.getFileAsync is limited to the single active presentation.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
     const errorMsg = "Office.js is not loaded or this is not an Office host.";
@@ -84,42 +86,45 @@ async function readActiveFile() {
     return;
   }
 
-  let file = null;
-  try {
-    // 1. Get the file handle
-    file = await getFileAsync(Office.FileType.Compressed, { sliceSize: 65536 });
-    const sliceCount = file.sliceCount;
-    const fileSize = file.size;
+  // Use a slight delay to ensure the "Reading..." message is rendered before potential blocking operations
+  setTimeout(async () => {
+    let file = null;
+    try {
+      // 1. Get the file handle
+      file = await getFileAsync(Office.FileType.Compressed, { sliceSize: 65536 });
+      const sliceCount = file.sliceCount;
+      const fileSize = file.size;
 
-    if (status) status.textContent = `File size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
+      if (status) status.textContent = `File size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
 
-    // 2. Pre-allocate Uint8Array for the file content
-    const fileData = new Uint8Array(fileSize);
-    let offset = 0;
+      // 2. Pre-allocate Uint8Array for the file content
+      const fileData = new Uint8Array(fileSize);
+      let offset = 0;
 
-    // 3. Read slices sequentially
-    for (let i = 0; i < sliceCount; i++) {
-      const slice = await getSliceAsync(file, i);
-      fileData.set(slice.data, offset);
-      offset += slice.data.length;
+      // 3. Read slices sequentially
+      for (let i = 0; i < sliceCount; i++) {
+        const slice = await getSliceAsync(file, i);
+        fileData.set(slice.data, offset);
+        offset += slice.data.length;
+
+        if (status) {
+          status.textContent = `Reading progress: ${Math.round(((i + 1) / sliceCount) * 100)}%`;
+        }
+      }
 
       if (status) {
-        status.textContent = `Reading progress: ${Math.round(((i + 1) / sliceCount) * 100)}%`;
+        status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
+      }
+      console.log(`Read ${fileSize} bytes from the active presentation(s).`);
+    } catch (error) {
+      const errorMsg = `Error reading file(s): ${error.message || error}`;
+      console.error(errorMsg);
+      if (status) status.textContent = errorMsg;
+    } finally {
+      // 4. Always close the file handle
+      if (file) {
+        await closeAsync(file);
       }
     }
-
-    if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
-    }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
-  } catch (error) {
-    const errorMsg = `Error reading file: ${error.message || error}`;
-    console.error(errorMsg);
-    if (status) status.textContent = errorMsg;
-  } finally {
-    // 4. Always close the file handle
-    if (file) {
-      await closeAsync(file);
-    }
-  }
+  }, 10);
 }
