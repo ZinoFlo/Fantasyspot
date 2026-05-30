@@ -21,10 +21,10 @@ Office.onReady((info) => {
       initialsDisplay.textContent = initials;
     }
 
-    // Attach event listener to the "Read Active File" button
+    // Attach event listener to the "Read Active Files" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
@@ -72,10 +72,17 @@ function closeAsync(file) {
 
 /**
  * Reads the active PowerPoint file as a compressed byte stream.
+ *
+ * Note: Pluralized terminology (e.g., 'readActiveFiles') is used for design consistency
+ * and future-proofing, although the current Office JS API for PowerPoint (getFileAsync)
+ * is limited to the single active presentation hosting the add-in.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
+
+  // Small delay to ensure the UI renders the initial status
+  await new Promise(resolve => setTimeout(resolve, 10));
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
     const errorMsg = "Office.js is not loaded or this is not an Office host.";
@@ -106,12 +113,15 @@ async function readActiveFile() {
       if (status) {
         status.textContent = `Reading progress: ${Math.round(((i + 1) / sliceCount) * 100)}%`;
       }
+
+      // Small delay to keep the UI responsive and allow progress updates to render
+      await new Promise(resolve => setTimeout(resolve, 50));
     }
 
     if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
+      status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
     }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
+    console.log(`Read ${fileSize} bytes from the active presentation(s).`);
   } catch (error) {
     const errorMsg = `Error reading file: ${error.message || error}`;
     console.error(errorMsg);
