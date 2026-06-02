@@ -47,7 +47,7 @@ test.describe('Office Add-in UI Tests', () => {
       };
     });
 
-    await page.goto('http://localhost:3000/index.html');
+    await page.goto('/index.html');
   });
 
   test('should initialize with correct initials', async ({ page }) => {
