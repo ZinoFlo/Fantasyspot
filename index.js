@@ -24,7 +24,7 @@ Office.onReady((info) => {
     // Attach event listener to the "Read Active File" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
@@ -72,10 +72,16 @@ function closeAsync(file) {
 
 /**
  * Reads the active PowerPoint file as a compressed byte stream.
+ * Note: Pluralized terminology (active file(s), presentation(s)) is used for design
+ * consistency, although PowerPoint's getFileAsync technical limitation restricts
+ * reading to the single active document.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
+
+  // Small delay to ensure the UI renders the status message
+  await new Promise(resolve => setTimeout(resolve, 10));
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
     const errorMsg = "Office.js is not loaded or this is not an Office host.";
@@ -93,6 +99,9 @@ async function readActiveFile() {
 
     if (status) status.textContent = `File size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
 
+    // Small delay to ensure the UI renders the status message
+    await new Promise(resolve => setTimeout(resolve, 10));
+
     // 2. Pre-allocate Uint8Array for the file content
     const fileData = new Uint8Array(fileSize);
     let offset = 0;
@@ -106,12 +115,19 @@ async function readActiveFile() {
       if (status) {
         status.textContent = `Reading progress: ${Math.round(((i + 1) / sliceCount) * 100)}%`;
       }
+
+      // Allow UI to render progress updates
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
     if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
+      status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
     }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
+
+    // Small delay for UI verification
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    console.log(`Read ${fileSize} bytes from the active presentation(s).`);
   } catch (error) {
     const errorMsg = `Error reading file: ${error.message || error}`;
     console.error(errorMsg);
