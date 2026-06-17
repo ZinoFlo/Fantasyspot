@@ -37,7 +37,7 @@ test.describe('Office Add-in UI', () => {
                           status: 'Succeeded',
                           value: { data: new Uint8Array(50) },
                         });
-                      }, 50);
+                      }, 500);
                     },
                     closeAsync: (closeCallback) => {
                       if (closeCallback) closeCallback();
