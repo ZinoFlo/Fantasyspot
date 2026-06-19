@@ -33,7 +33,7 @@ test('should initialize and read file correctly', async ({ page }) => {
                         status: 'Succeeded',
                         value: { data: new Uint8Array(50) }
                       });
-                    }, 100);
+                    }, 500); // Increased delay for more reliable state transitions
                   },
                   closeAsync: (closeCallback) => {
                     setTimeout(() => {
@@ -42,7 +42,7 @@ test('should initialize and read file correctly', async ({ page }) => {
                   }
                 }
               });
-            }, 100);
+            }, 500); // Increased delay
           }
         }
       }
@@ -65,7 +65,6 @@ test('should initialize and read file correctly', async ({ page }) => {
   await expect(status).toHaveText(/File size: 100 bytes\. Reading 2 slices\.\.\./);
 
   // Wait for progress updates
-  // Note: '100%' progress might be skipped by Playwright due to rapid transition to success message.
   await expect(status).toHaveText(/Reading progress: 50%/);
 
   // Verify final success message
