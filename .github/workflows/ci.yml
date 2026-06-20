@@ -13,9 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup Node.js
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
         cache: 'npm'
     - run: npm install
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps chromium
     - run: npm test
