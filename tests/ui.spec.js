@@ -60,6 +60,10 @@ test.describe('Eco-growth Discovery Add-in', () => {
   test('should read active file(s) successfully', async ({ page }) => {
     const readBtn = page.locator('#read-files-btn');
     const status = page.locator('#status');
+    const initialsDisplay = page.locator('#initials-display');
+
+    // Wait for initialization to complete before interacting
+    await expect(initialsDisplay).toHaveText('JV');
 
     await expect(readBtn).toHaveText('Read Active File(s)');
 
