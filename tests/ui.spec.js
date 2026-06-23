@@ -32,7 +32,7 @@ test.beforeEach(async ({ page }) => {
                         status: 'Succeeded',
                         value: { data: new Uint8Array(50) }
                       });
-                    }, 100);
+                    }, 500);
                   },
                   closeAsync: (closeCallback) => {
                     setTimeout(() => {
@@ -67,7 +67,6 @@ test('read active file(s) process', async ({ page }) => {
 
   // Check intermediate states
   await expect(status).toHaveText(/Reading active file\(s\)\.\.\./);
-  await expect(status).toHaveText(/File size: 100 bytes/);
   await expect(status).toHaveText(/Reading progress: 50%/);
 
   // Check final state

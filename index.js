@@ -100,6 +100,7 @@ async function readActiveFiles() {
 
     if (status) status.textContent = `File size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
 
+
     // 2. Pre-allocate Uint8Array for the file content
     const fileData = new Uint8Array(fileSize);
     let offset = 0;

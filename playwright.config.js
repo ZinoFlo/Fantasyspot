@@ -6,6 +6,12 @@ module.exports = defineConfig({
     baseURL: 'http://localhost:3000',
     headless: true,
   },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...require('@playwright/test').devices['Desktop Chrome'] },
+    },
+  ],
   webServer: {
     command: 'npm start',
     url: 'http://localhost:3000',
