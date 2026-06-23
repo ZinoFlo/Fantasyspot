@@ -21,13 +21,20 @@ Office.onReady((info) => {
       initialsDisplay.textContent = initials;
     }
 
-    // Attach event listener to the "Read Active File" button
+    // Attach event listener to the "Read Active File(s)" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
+
+/**
+ * Note: While the current Office JS API (getFileAsync) is technically limited
+ * to reading the single active document that hosts the add-in, we use
+ * pluralized terminology (e.g., "active file(s)") in the UI and function names
+ * for design consistency and to align with future feature parity.
+ */
 
 /**
  * Promisified wrapper for Office.context.document.getFileAsync.
@@ -71,11 +78,11 @@ function closeAsync(file) {
 }
 
 /**
- * Reads the active PowerPoint file as a compressed byte stream.
+ * Reads the active PowerPoint file(s) as a compressed byte stream.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
     const errorMsg = "Office.js is not loaded or this is not an Office host.";
@@ -109,11 +116,11 @@ async function readActiveFile() {
     }
 
     if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
+      status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
     }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
+    console.log(`Read ${fileSize} bytes from the active presentation(s).`);
   } catch (error) {
-    const errorMsg = `Error reading file: ${error.message || error}`;
+    const errorMsg = `Error reading file(s): ${error.message || error}`;
     console.error(errorMsg);
     if (status) status.textContent = errorMsg;
   } finally {
