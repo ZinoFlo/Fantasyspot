@@ -29,7 +29,7 @@ test.describe('Eco-growth Discovery Taskpane', () => {
                           status: 'Succeeded',
                           value: { data: new Uint8Array(50) }
                         });
-                      }, 50);
+                      }, 500);
                     },
                     closeAsync: (closeCallback) => {
                       setTimeout(() => {
