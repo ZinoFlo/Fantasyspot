@@ -4,3 +4,10 @@ appengine-generated/
 # Node.js
 node_modules/
 npm-debug.log
+
+# Local development and testing
+server.log
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
