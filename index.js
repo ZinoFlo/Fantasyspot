@@ -24,7 +24,7 @@ Office.onReady((info) => {
     // Attach event listener to the "Read Active File" button
     const readBtn = document.getElementById("read-files-btn");
     if (readBtn) {
-      readBtn.onclick = readActiveFile;
+      readBtn.onclick = readActiveFiles;
     }
   }
 });
@@ -71,11 +71,15 @@ function closeAsync(file) {
 }
 
 /**
- * Reads the active PowerPoint file as a compressed byte stream.
+ * Reads the active PowerPoint presentation(s) as a compressed byte stream.
+ *
+ * NOTE: Pluralized terminology (e.g., "active file(s)", "presentation(s)") is used
+ * for design and UI consistency, although the Office JS API (getFileAsync) is
+ * technically limited to reading the single active document/presentation hosting the add-in.
  */
-async function readActiveFile() {
+async function readActiveFiles() {
   const status = document.getElementById("status");
-  if (status) status.textContent = "Reading file...";
+  if (status) status.textContent = "Reading active file(s)...";
 
   if (typeof Office === "undefined" || !Office.context || !Office.context.document) {
     const errorMsg = "Office.js is not loaded or this is not an Office host.";
@@ -91,9 +95,9 @@ async function readActiveFile() {
     const sliceCount = file.sliceCount;
     const fileSize = file.size;
 
-    if (status) status.textContent = `File size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
+    if (status) status.textContent = `Active file(s) size: ${fileSize} bytes. Reading ${sliceCount} slices...`;
 
-    // 2. Pre-allocate Uint8Array for the file content
+    // 2. Pre-allocate Uint8Array for the presentation(s) content
     const fileData = new Uint8Array(fileSize);
     let offset = 0;
 
@@ -109,11 +113,11 @@ async function readActiveFile() {
     }
 
     if (status) {
-      status.textContent = `Successfully read active file: ${fileSize} bytes.`;
+      status.textContent = `Successfully read active file(s): ${fileSize} bytes.`;
     }
-    console.log(`Read ${fileSize} bytes from the active presentation.`);
+    console.log(`Read ${fileSize} bytes from the active presentation(s).`);
   } catch (error) {
-    const errorMsg = `Error reading file: ${error.message || error}`;
+    const errorMsg = `Error reading active file(s): ${error.message || error}`;
     console.error(errorMsg);
     if (status) status.textContent = errorMsg;
   } finally {
