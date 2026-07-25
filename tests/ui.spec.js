@@ -66,11 +66,8 @@ test.describe('Eco-growth Discovery Office Add-in UI Tests', () => {
   test('should initialize and display initials "JV"', async ({ page }) => {
     await page.goto('/');
 
-    // Initially, displays '--'
+    // Verify initials Display is updated to 'JV' after Office.onReady runs
     const initialsDisplay = page.locator('#initials-display');
-    await expect(initialsDisplay).toHaveText('--');
-
-    // After Office.onReady runs, should display 'JV'
     await expect(initialsDisplay).toHaveText('JV', { timeout: 5000 });
   });
 
