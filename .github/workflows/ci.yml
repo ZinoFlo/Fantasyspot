@@ -18,4 +18,5 @@ jobs:
         node-version: '20'
         cache: 'npm'
     - run: npm install
+    - run: npx playwright install chromium --with-deps
     - run: npm test
