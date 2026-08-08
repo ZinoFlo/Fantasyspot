@@ -67,12 +67,18 @@ test.describe('Eco-growth Discovery Taskpane UI Tests', () => {
   });
 
   test('initializes and loads JV initials', async ({ page }) => {
+    // Wait for the element to appear in the DOM before asserting
+    await page.waitForSelector('#initials-display', { timeout: 10000 });
+    
     // The element defaults to '--' and changes to 'JV' on Office initialization
     const initialsDisplay = page.locator('#initials-display');
     await expect(initialsDisplay).toHaveText('JV');
   });
 
   test('reads active files and updates status progress and success', async ({ page }) => {
+    // Wait for the element to appear in the DOM before asserting
+    await page.waitForSelector('#initials-display', { timeout: 10000 });
+    
     // Verify initials JV are loaded first to ensure Office.js onReady has completed
     const initialsDisplay = page.locator('#initials-display');
     await expect(initialsDisplay).toHaveText('JV');
