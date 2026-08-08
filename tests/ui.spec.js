@@ -84,7 +84,7 @@ test.describe('Eco-growth Discovery Taskpane UI Tests', () => {
     await expect(initialsDisplay).toHaveText('JV');
 
     const readBtn = page.locator('#read-files-btn');
-    await expect(readBtn).toHaveText('Read Active File(s)');
+    await expect(readBtn).toHaveText('Read Active File');
 
     const status = page.locator('#status');
     await expect(status).toBeEmpty();
